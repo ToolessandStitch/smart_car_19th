@@ -12,6 +12,7 @@
 // **************************** 代码区域 ****************************
 int main (void)
 {
+		//各种初始化部分
     clock_init(SYSTEM_CLOCK_600M);                                              // 初始化芯片时钟 工作频率为 600MHz
     debug_init();                                                               // 初始化默认 debug uart
     // 此处编写用户代码 例如外设初始化代码等
@@ -22,7 +23,7 @@ int main (void)
 		uint8 PS2_KEY = 1, X1=0,Y1=0,X2=0,Y2=0; 
 		imu963ra_init();
 		ips200_init(IPS200_TYPE);
-	
+    kalmanFilterInit(&filter, 0.001, 0.003, 0.03);
     pwm_Init();
 		DIR_IO_Init();
 		encoder_init();
@@ -56,22 +57,13 @@ int main (void)
 		pit_ms_init(PIT_CH2, 10);
 		wireless_uart_init();
 		PS2_Init();
-
+		alpha=0.45;
     while(1)
     {
-				PS2_KEY = PS2_DataKey();	 //手柄按键捕获处理
-				//获取模拟值
-			if(PS2_KEY == PSB_L1 || PS2_KEY == PSB_R1)
-			{
-				X1 = PS2_AnologData(PSS_LX);
-				Y1 = PS2_AnologData(PSS_LY);
-				X2 = PS2_AnologData(PSS_RX);
-				Y2 = PS2_AnologData(PSS_RY);
-			}
-			printf("%d\r\n",X1);
-				sevor_control();
-				ips200_show_int(10,10,1,1);
-				SetSpeed_front_left=400;
+					float data1 = imu963ra_mag_transition(imu963ra_mag_x); 
+					float data2 = imu963ra_mag_transition(imu963ra_mag_y); 
+					float data3 = imu963ra_mag_transition(imu963ra_mag_z); 
+					printf("%.1f  %.1f  %.1f\r\n",data1,data2,data3);
 //				key_scanner();
 //				key_1=key_get_state(KEY_1);
 //				key_2=key_get_state(KEY_2);
@@ -79,9 +71,7 @@ int main (void)
 //				key_4=key_get_state(KEY_4);
 //				key_5=key_get_state(KEY_5);
 //				key_6=key_get_state(KEY_6);
-			my_camera(1);
-			TwoThreshold();
-			
+
     }
 }
 // **************************** 代码区域 ****************************

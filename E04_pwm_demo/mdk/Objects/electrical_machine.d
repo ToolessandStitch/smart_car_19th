@@ -110,4 +110,5 @@
   ..\..\libraries\sdk\drives\fsl_usdhc.h \
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_spec.h \
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
-  ..\..\libraries\sdk\board\clock_config.h ..\code\electrical_machine.h
+  ..\..\libraries\sdk\board\clock_config.h ..\code\electrical_machine.h \
+  ..\code\efficient.h D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h

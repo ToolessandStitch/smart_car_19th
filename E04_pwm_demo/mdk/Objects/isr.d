@@ -111,5 +111,6 @@
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_spec.h \
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
   ..\..\libraries\sdk\board\clock_config.h ..\user\inc\isr.h \
-  ..\code\pid.h ..\code\electrical_machine.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h
+  ..\code\pid.h ..\code\efficient.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\code\electrical_machine.h ..\code\control_wheel.h

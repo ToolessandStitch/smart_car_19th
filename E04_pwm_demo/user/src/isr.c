@@ -37,13 +37,16 @@
 #include "zf_common_debug.h"
 #include "isr.h"
 #include "electrical_machine.h"
+#include "efficient.h"
 #include "pid.h"
 #include "math.h"
+#include "control_wheel.h"
 #define delta_T      0.005f  //5ms计算一次
 int i=0;
+KalmanFilter filter;
 float A_XY=0;
 float x=0.82,y=0.01,z=12;
-int16 imu963ra_gyro_z_last;
+int16 imu963ra_gyro_z_last,imu963ra_gyro_y_last,imu963ra_gyro_x_last;
 long front_left_road=0,front_right_road=0,down_left_road=0,down_right_road=0;
 int SetSpeed_front_left,SetSpeed_front_right,SetSpeed_down_left,SetSpeed_down_right;
 int key_0,key_1,key_2,key_3,key_4,key_5,key_6;
@@ -51,7 +54,7 @@ _pid speed_Front_left,speed_Front_right,speed_down_left,speed_down_right;
 float PWM_front_left,PWM_front_right,PWM_down_left,PWM_down_right;
 float speed_front_left1,speed_front_right1,speed_down_left1,speed_down_right1;
 _pid lfw,rfw,ldw,rdw;
-float turn;
+float turn,angle_pro,imu963ra_acc_y_pro,imu963ra_gyro_y_pro,angle_pro_max;
 void CSI_IRQHandler(void)
 {
     CSI_DriverIRQHandler();     // 调用SDK自带的中断函数 这个函数最后会调用我们设置的回调函数
@@ -60,16 +63,24 @@ void CSI_IRQHandler(void)
 
 void IMU_get_count(void)
 	{
+				imu963ra_get_acc();
 				imu963ra_get_gyro();
-//				imu963ra_gyro_z=x*imu963ra_gyro_z_last+y*(imu963ra_gyro_z+z);
-//				imu963ra_gyro_z_last=imu963ra_gyro_z;
-					
+				imu963ra_get_mag();
+				imu963ra_gyro_z_last=angle_z_time();
+				imu963ra_gyro_y_last=angle_y_time();
+				imu963ra_gyro_x_last=angle_x_time();
+				imu963ra_acc_x_last=imu963ra_acc_x_time();
+				imu963ra_acc_y_last=imu963ra_acc_y_time();
+				imu963ra_acc_z_last=imu963ra_acc_z_time();
+				angle_pro=angle_calc(imu963ra_acc_z_last,imu963ra_gyro_z_last);
+				angle_pro_max=kalmanFilterUpdate(&filter,imu963ra_gyro_z_last,imu963ra_acc_z_last,0.001);	
 	}
 int flag=0;
+	//各项数据获取（陀螺仪，加速度计，编码器）
 void PIT_IRQHandler(void)
 {
     if(pit_flag_get(PIT_CH0))
-    {		
+    {		//硬件消抖（可能是编码器问题）
 				if(flag<40)
 				{
 					flag++;
@@ -82,7 +93,7 @@ void PIT_IRQHandler(void)
 				front_left_counts=encoder_get_count(QTIMER1_ENCODER1);
 				front_right_counts=-encoder_get_count(QTIMER2_ENCODER1);
 				down_left_counts=encoder_get_count(QTIMER2_ENCODER2);
-				down_right_counts=encoder_get_count(QTIMER1_ENCODER2);
+				down_right_counts=-encoder_get_count(QTIMER1_ENCODER2);
 				
 
 				front_left_road+=front_left_counts;
@@ -94,35 +105,17 @@ void PIT_IRQHandler(void)
 				encoder_clear_count(QTIMER2_ENCODER1);
 				encoder_clear_count(QTIMER1_ENCODER2);
 				encoder_clear_count(QTIMER2_ENCODER2);	
-				
+				//获取imu963ra陀螺仪数据
 				IMU_get_count();
-				turn=((imu963ra_gyro_z+5)/16.4)*delta_T;
-				if(fabs(turn)<0.04)
-				{
-					turn=0;
-				}
-				A_XY=2*turn+A_XY;
-				A_XY=A_XY;
         pit_flag_clear(PIT_CH0);
     }
     
     if(pit_flag_get(PIT_CH1))
     {
-			//23,0.18,0
-				speed_front_left1=PID_Calc(&lfw,4,0,1.4,(float)5000,(float)front_left_road);
-				PWM_front_left=PID_Calc(&speed_Front_left,3,0,0.9,(float)speed_front_left1,(float)front_left_counts);
+				//姿态控制
+					motor_control_road(500,500,500,500);
 
-				speed_front_right1=PID_Calc(&rfw,3,0,1.0,(float)5000,(float)front_right_road);
-				PWM_front_right=PID_Calc(&speed_Front_right,4,0,0.5,(float)speed_front_right1,(float)front_right_counts);
-			
-				speed_down_left1=PID_Calc(&ldw,3.1,0,0.99,(float)5000,(float)down_left_road);
-				PWM_down_left=PID_Calc(&speed_down_left,3.8,0,0.54,(float)speed_down_left1,(float)down_left_counts);
-			
-				speed_down_right1=PID_Calc(&rdw,3.3,0,1.45,(float)5000,(float)down_right_road);
-				PWM_down_right=PID_Calc(&speed_down_right,3,0,0.9,(float)speed_down_right1,(float)down_right_counts);
-			
-				motor_control(PWM_down_left,PWM_down_right,PWM_front_right,PWM_front_left);
-			
+	
         pit_flag_clear(PIT_CH1);
     }
     

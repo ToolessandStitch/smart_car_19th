@@ -4,7 +4,7 @@
 #include "fsl_gpio.h"
 #include "zf_driver_encoder.h"
 #include "electrical_machine.h"
-
+#include "efficient.h"
 long front_left_counts=0,front_right_counts=0,down_left_counts=0,down_right_counts=0;
 
 void pwm_Init()//电机PWM初始化
@@ -177,3 +177,4 @@ void encoder_get()
 	encoder_clear_count(QTIMER1_ENCODER2);
 	encoder_clear_count(QTIMER2_ENCODER2);
 }
+

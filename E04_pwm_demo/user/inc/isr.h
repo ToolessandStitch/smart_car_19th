@@ -38,7 +38,9 @@
 #ifndef _isr_h
 #define _isr_h
 #include "pid.h"
+#include "efficient.h"
 extern int i;
+extern KalmanFilter filter;
 extern long front_left_road,front_right_road,down_left_road,down_right_road;
 extern _pid speed_Front_left,speed_Front_right,speed_down_left,speed_down_right;
 extern int SetSpeed_front_left,SetSpeed_front_right,SetSpeed_down_left,SetSpeed_down_right;
@@ -47,6 +49,7 @@ extern int key_0,key_1,key_2,key_3,key_4,key_5,key_6;
 extern _pid lfw,rfw,ldw,rdw;
 extern float A_XY;
 extern float x,y,z;
-extern float turn;
-extern int16 imu963ra_gyro_z_last;
+extern float turn,angle_pro,imu963ra_acc_y_pro,imu963ra_gyro_y_pro,angle_pro_max;
+extern int16 imu963ra_gyro_z_last,imu963ra_gyro_y_last,imu963ra_gyro_x_last;
+extern float speed_front_left1,speed_front_right1,speed_down_left1,speed_down_right1;
 #endif

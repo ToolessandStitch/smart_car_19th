@@ -1,14 +1,13 @@
-./objects/electrical_machine.o: ..\code\electrical_machine.c \
-  ..\..\libraries\zf_common\zf_common_debug.h \
-  ..\..\libraries\zf_common\zf_common_typedef.h \
+./objects/eight_neighborhood.o: ..\code\eight_neighborhood.c \
+  ..\code\eight_neighborhood.h ..\code\mt9v03x.h \
+  ..\..\libraries\zf_common\zf_common_headfile.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   ..\..\libraries\sdk\drives\fsl_common.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\assert.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
   ..\..\libraries\sdk\deceive\fsl_device_registers.h \
   ..\..\libraries\sdk\deceive\MIMXRT1064.h \
@@ -24,29 +23,30 @@
   ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\sdk\drives\fsl_clock.h \
   ..\..\libraries\sdk\drives\fsl_common.h \
-  ..\..\libraries\sdk\drives\fsl_common_arm.h \
-  ..\..\libraries\zf_driver\zf_driver_gpio.h \
-  ..\..\libraries\sdk\deceive\MIMXRT1064.h \
-  ..\..\libraries\zf_common\zf_common_typedef.h \
-  ..\..\libraries\sdk\drives\fsl_gpio.h \
-  ..\..\libraries\zf_common\zf_common_headfile.h \
   ..\..\libraries\sdk\utilities\debug_console\fsl_debug_console.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
   ..\..\libraries\sdk\drives\fsl_iomuxc.h \
   ..\..\libraries\sdk\drives\fsl_cache.h \
   ..\..\libraries\sdk\drives\fsl_csi.h \
+  ..\..\libraries\zf_common\zf_common_typedef.h \
+  ..\..\libraries\sdk\drives\fsl_common_arm.h \
   ..\..\libraries\zf_common\zf_common_clock.h \
   ..\..\libraries\zf_common\zf_common_debug.h \
   ..\..\libraries\zf_common\zf_common_fifo.h \
   ..\..\libraries\zf_common\zf_common_font.h \
   ..\..\libraries\zf_common\zf_common_function.h \
   ..\..\libraries\zf_common\zf_common_interrupt.h \
+  ..\..\libraries\sdk\deceive\MIMXRT1064.h \
   ..\..\libraries\zf_common\zf_common_vector.h \
   ..\..\libraries\zf_driver\zf_driver_adc.h \
+  ..\..\libraries\zf_common\zf_common_typedef.h \
   ..\..\libraries\zf_driver\zf_driver_delay.h \
   ..\..\libraries\zf_driver\zf_driver_encoder.h \
   ..\..\libraries\zf_driver\zf_driver_exti.h \
   ..\..\libraries\zf_driver\zf_driver_gpio.h \
+  ..\..\libraries\sdk\drives\fsl_gpio.h \
   ..\..\libraries\zf_driver\zf_driver_flash.h \
+  ..\..\libraries\zf_driver\zf_driver_gpio.h \
   ..\..\libraries\zf_driver\zf_driver_iic.h \
   ..\..\libraries\zf_driver\zf_driver_pit.h \
   ..\..\libraries\sdk\drives\fsl_pit.h \
@@ -77,6 +77,7 @@
   ..\..\libraries\zf_device\zf_device_ips114.h \
   ..\..\libraries\zf_device\zf_device_ips200.h \
   ..\..\libraries\zf_device\zf_device_key.h \
+  ..\..\libraries\zf_common\zf_common_debug.h \
   ..\..\libraries\zf_device\zf_device_mpu6050.h \
   ..\..\libraries\zf_device\zf_device_oled.h \
   ..\..\libraries\zf_device\zf_device_mt9v03x.h \
@@ -110,6 +111,8 @@
   ..\..\libraries\sdk\drives\fsl_usdhc.h \
   ..\..\libraries\components\sdmmc\common\fsl_sdmmc_spec.h \
   ..\..\libraries\components\sdmmc\sdmmc_config.h \
-  ..\..\libraries\sdk\board\clock_config.h ..\code\electrical_machine.h \
-  ..\code\efficient.h D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
-  ..\code\pid.h ..\user\inc\isr.h ..\code\pid.h ..\code\efficient.h
+  ..\..\libraries\sdk\board\clock_config.h ..\user\inc\isr.h \
+  ..\code\pid.h ..\code\efficient.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  ..\code\electrical_machine.h ..\code\efficient.h ..\code\pid.h \
+  ..\code\control_wheel.h

@@ -3,17 +3,14 @@
 *
 * 高效算法包含：Atan2求反正切、swap交换算法、Glenn W. Rowe划分算法、快速排序算法、卡马尔开方算法
 *（高效算法是用来提高MCU运行效率和降低算法复杂度的，和具体物理实现无关，调用总钻风代码时可忽略不管）
-*
 * 文件名称          efficient.c 
 * 创建时间：2023-9-14
 * 作者：长了牙的无牙仔
-
-
 * 备注：以下代码为本人通过查阅论文和技术博客文章整理而来，具体为啥是这样的我也不太清楚，如果读者想深入了解
 *       学习的话，可以参考readme里的文章链接
 ********************************************************************************************************************/
 
-//头文件调用
+/******头文件的声明******/
 #include "efficient.h"
 #include "zf_common_headfile.h"
 #include "zf_common_debug.h"
@@ -113,7 +110,7 @@ float angle_calc(float angle_m, float gyro_m)
 		angle += gyro_m * dt;
 		accel_angle=angle_m;
 		temp_angle= alpha*(angle + gyro_m * dt)+(1 - alpha) * accel_angle;
-    return temp_angle*29.8507;
+    return temp_angle*562.5;
 }
 ////一阶互补滤波对角度的预测
 //void update_attitude() 
@@ -126,8 +123,16 @@ float angle_calc(float angle_m, float gyro_m)
 //    
 //    // 使用互补滤波器进行数据融合
 //    angle = alpha * (angle + gyro_rate * dt) + (1 - alpha) * accel_angle;
-//}
+//
+//	}
 int16 imu963ra_acc_x_last,imu963ra_acc_y_last,imu963ra_acc_z_last;
+float angle_pro_last;
+float angle_pro_time()
+{
+				angle_pro=0.82*angle_pro_last+0.01*(angle_pro);
+				angle_pro_last=angle_pro;
+	return angle_pro_last;	
+}
 //陀螺仪角度z值均值滤波函数
 float angle_z_time()
 {

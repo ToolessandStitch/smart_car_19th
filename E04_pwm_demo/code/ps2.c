@@ -1,30 +1,25 @@
 /********************************************************************************************************************
 * 遥控器手柄通讯
-*
 * 该文件包含算法：
 * 通讯
-*
-* 文件名称          mt9v03x.c 
-* 创建时间：2023-9-14
+* 文件名称    ps2.c
+* 创建时间：2023-10-13
 * 作者：长了牙的无牙仔
-
-* 备注：1. Canny算子是一整套图像处理的集合，其中包含了高斯模糊、Sobel算子（Scharr算子）、非极大值抑制、双边缘检测与链接
-*       2. readme里会提供详细讲解相关算法的文章链接
+* 备注：1.此文件仅用于用遥控器控制小车的情况
+				2.无法用此文件实现车机电脑的互联
 ********************************************************************************************************************/
 
-
-
-
+/******头文件的声明******/
 #include "zf_common_debug.h"
 #include "zf_driver_gpio.h"
 #include "zf_common_headfile.h"
 #include "fsl_gpio.h"
 #include "zf_driver_encoder.h"
 #include "ps2.h"
+/******全局变量的定义******/
 uint16 Handkey;
 uint8 Comd[2]={0x01,0x42};	//开始命令。请求数据
 uint8 scan[9]={0x01,0x42,0x00,0x00,0x00,0x00,0x00,0x00,0x00};//{0x01,0x42,0x00,0x5A,0x5A,0x5A,0x5A,0x5A,0x5A};	// 类型读取
-
 uint8 Data[9]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; //数据存储数组
 uint16 MASK[]={
     PSB_SELECT,
@@ -44,21 +39,19 @@ uint16 MASK[]={
     PSB_BLUE,
     PSB_PINK
 	};	//按键值与按键明
-void PS2_Init(void)
+
+/******具体函数******/
+void PS2_Init(void)//按键初始化
 {
 	gpio_init(D13,GPO,0,GPO_PUSH_PULL);
 	gpio_init(D14,GPO,0,GPO_PUSH_PULL);
 	gpio_init(D15,GPO,0,GPO_PUSH_PULL);
-	
 	gpio_init(D12,GPO,0,FAST_GPI_PULL_DOWN);
 	DO_H;
 	CLC_H;
 	CS_H;
-
 }
-
-//读取手柄数据
-uint8 PS2_ReadData(uint8 command)
+uint8 PS2_ReadData(uint8 command)//读取手柄数据
 {
 
 	uint8 i,j=1;
@@ -83,10 +76,7 @@ uint8 PS2_ReadData(uint8 command)
 	system_delay_us(50);
     return res;	
 }
-
-//对读出来的 PS2 的数据进行处理
-//按下为 0， 未按下为 1
-unsigned char PS2_DataKey()
+unsigned char PS2_DataKey()//对读出来的 PS2 的数据进行处理，按下为 0， 未按下为 1
 {
 	uint8 index = 0, i = 0;
 
@@ -97,8 +87,6 @@ unsigned char PS2_DataKey()
 		Data[i] = PS2_ReadData(scan[i]);	
 	} 
 	CS_H;
-	
-
 	Handkey=(Data[4]<<8)|Data[3];     //这是16个按键  按下为0， 未按下为1
 	for(index=0;index<16;index++)
 	{	    
@@ -107,15 +95,11 @@ unsigned char PS2_DataKey()
 	}
 	return 0;          //没有任何按键按下
 }
-
-//得到一个摇杆的模拟量	 范围0~256
-uint8 PS2_AnologData(uint8 button)
+uint8 PS2_AnologData(uint8 button)//得到一个摇杆的模拟量	 范围0~256
 {
 	return Data[button];
 }
-
-//清除数据缓冲区
-void PS2_ClearData()
+void PS2_ClearData()//清除数据缓冲区
 {
 	uint8 a;
 	for(a=0;a<9;a++)

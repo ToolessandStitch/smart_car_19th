@@ -469,6 +469,16 @@
               <FileType>5</FileType>
               <FilePath>..\code\efficient.h</FilePath>
             </File>
+            <File>
+              <FileName>eight_neighborhood.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\code\eight_neighborhood.c</FilePath>
+            </File>
+            <File>
+              <FileName>eight_neighborhood.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\code\eight_neighborhood.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

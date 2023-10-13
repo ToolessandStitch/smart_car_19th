@@ -30,10 +30,12 @@ float angle_z_time();
 float imu963ra_acc_x_time();
 float imu963ra_acc_y_time();
 float imu963ra_acc_z_time();
+extern float angle_pro_last;
 extern int16 imu963ra_acc_x_last,imu963ra_acc_y_last,imu963ra_acc_z_last;
 void kalmanFilterInit(KalmanFilter* filter, float Q_angle, float Q_bias, float R_measure);
 float kalmanFilterUpdate(KalmanFilter* filter, float gyroData, float accelData, float dt);
 void adjustFilterParameters(KalmanFilter* filter) ;
 void beiyong_angle();
+float angle_pro_time();
 extern float Q_angle, Q_bias, R_measure,alpha;
 #endif

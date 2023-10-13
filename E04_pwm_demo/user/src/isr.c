@@ -73,6 +73,7 @@ void IMU_get_count(void)
 				imu963ra_acc_y_last=imu963ra_acc_y_time();
 				imu963ra_acc_z_last=imu963ra_acc_z_time();
 				angle_pro=angle_calc(imu963ra_acc_z_last,imu963ra_gyro_z_last);
+				angle_pro_last=angle_pro_time();
 				angle_pro_max=kalmanFilterUpdate(&filter,imu963ra_gyro_z_last,imu963ra_acc_z_last,0.001);	
 	}
 int flag=0;
@@ -99,7 +100,7 @@ void PIT_IRQHandler(void)
 				front_left_road+=front_left_counts;
 				front_right_road+=front_right_counts;
 				down_left_road+=down_left_counts;
-				down_right_road-=down_right_counts;
+				down_right_road+=down_right_counts;
 			
 				encoder_clear_count(QTIMER1_ENCODER1);
 				encoder_clear_count(QTIMER2_ENCODER1);
@@ -112,10 +113,7 @@ void PIT_IRQHandler(void)
     
     if(pit_flag_get(PIT_CH1))
     {
-				//×ËÌ¬¿ØÖÆ
-					motor_control_road(500,500,500,500);
-
-	
+				motor_control_road(5000,0,0,0);
         pit_flag_clear(PIT_CH1);
     }
     
